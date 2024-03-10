@@ -22,6 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = windowScene
         window?.rootViewController = createTabbar()
         window?.makeKeyAndVisible()
+        
+        configureNavigationBar()
     }
     
     func createTabbar() -> UITabBarController {
@@ -33,14 +35,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithOpaqueBackground()
         UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+        
+        return tabbar
+    }
+    
+    func configureNavigationBar() {
         // correct the transparency bug for Navigation bars
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
         UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
-
         
-        return tabbar
+        UINavigationBar.appearance().tintColor = .systemGreen
     }
+    
     
     func createSearchNC() -> UINavigationController {
         let searchVC = SearchVC()

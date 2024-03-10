@@ -11,6 +11,13 @@ class SearchVC: UIViewController {
     let logoImageView = UIImageView()
     let usernameTextField = GFTextField()
     let ctaButton = GFButton(backgroundColor: .systemGreen, title: "Get Followers")
+    
+    var isUsernameEntered: Bool {
+        if let username = usernameTextField.text {
+            return !username.isEmpty
+        }
+        return false
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,11 +25,28 @@ class SearchVC: UIViewController {
         configureLogoImageView()
         configureTextField()
         configureCTAButton()
+        createDismissKeyboardTapGesture()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.isNavigationBarHidden = true
+        navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+    
+    func createDismissKeyboardTapGesture() {
+        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func pushFollowersListVC() {
+        guard isUsernameEntered else {
+            presentGFAlertOnMainThread(title: "Empty Username", message: "Please enter a username. We need to know who to look for 😊", buttonTitle: "Ok")
+            return
+        }
+        let followersListVC = FollowersListVC()
+        followersListVC.username = usernameTextField.text
+        followersListVC.title = usernameTextField.text
+        navigationController?.pushViewController(followersListVC, animated: true)
     }
     
     func configureLogoImageView() {
@@ -40,6 +64,7 @@ class SearchVC: UIViewController {
     
     func configureTextField() {
         view.addSubview(usernameTextField)
+        usernameTextField.delegate = self
         
         NSLayoutConstraint.activate([
             usernameTextField.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 40),
@@ -51,6 +76,7 @@ class SearchVC: UIViewController {
     
     func configureCTAButton() {
         view.addSubview(ctaButton)
+        ctaButton.addTarget(self, action: #selector(pushFollowersListVC), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
             ctaButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
@@ -58,5 +84,14 @@ class SearchVC: UIViewController {
             ctaButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50),
             ctaButton.heightAnchor.constraint(equalToConstant: 50)
         ])
+    }
+}
+
+
+extension SearchVC: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        pushFollowersListVC()
+        print("Did Tap Return")
+        return true
     }
 }
