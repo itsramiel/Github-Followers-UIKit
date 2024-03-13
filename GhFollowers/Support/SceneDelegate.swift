@@ -40,11 +40,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func configureNavigationBar() {
-        // correct the transparency bug for Navigation bars
-        let navigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.configureWithOpaqueBackground()
-        UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
-        
         UINavigationBar.appearance().tintColor = .systemGreen
     }
     
