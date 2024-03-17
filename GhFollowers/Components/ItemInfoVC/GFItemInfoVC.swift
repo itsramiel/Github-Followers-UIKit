@@ -15,6 +15,8 @@ class GFItemInfoVC: UIViewController {
     let itemInfoViewTwo = GFItemInfoView()
     let actionButton = GFButton()
     
+    weak var delegate: UserInfoVCDelegate?
+    
     init(user: User) {
         self.user = user
         super.init(nibName: nil, bundle: nil)
@@ -27,8 +29,17 @@ class GFItemInfoVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureBackgroundView()
+        configureActionButton()
         layoutUI()
         configureStackView()
+    }
+    
+    private func configureActionButton() {
+        actionButton.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc func actionButtonTapped() {
+        fatalError("This class is not meant to be used on its own. Use as a subclass and override this method")
     }
     
     func configureBackgroundView() {
