@@ -20,44 +20,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        window?.rootViewController = createTabbar()
+        window?.rootViewController = GFTabBarController()
         window?.makeKeyAndVisible()
         
         configureNavigationBar()
     }
     
-    func createTabbar() -> UITabBarController {
-        let tabbar = UITabBarController()
-        UITabBar.appearance().tintColor = .systemGreen
-        tabbar.viewControllers = [createSearchNC(), createFavoritesNC()]
-        
-        // correct the transparency bug for Tab bars
-        let tabBarAppearance = UITabBarAppearance()
-        tabBarAppearance.configureWithOpaqueBackground()
-        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
-        
-        return tabbar
-    }
-    
     func configureNavigationBar() {
         UINavigationBar.appearance().tintColor = .systemGreen
-    }
-    
-    
-    func createSearchNC() -> UINavigationController {
-        let searchVC = SearchVC()
-        searchVC.title = "Search"
-        searchVC.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 0)
-        
-        return UINavigationController(rootViewController: searchVC)
-    }
-    
-    func createFavoritesNC() -> UINavigationController {
-        let favoritesVC = FavoritesListVC()
-        favoritesVC.title = "Favorites"
-        favoritesVC.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 1)
-        
-        return UINavigationController(rootViewController: favoritesVC)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

@@ -81,6 +81,7 @@ class NetworkManager {
             do {
                 let decoder = JSONDecoder()
                 decoder.keyDecodingStrategy = .convertFromSnakeCase
+                decoder.dateDecodingStrategy = .iso8601
                 let user = try decoder.decode(User.self, from: data)
                 completed(.success(user))
             } catch {
@@ -90,5 +91,20 @@ class NetworkManager {
         
         task.resume()
     }
-
+    
+    func _downloadImage(from url: String) async -> UIImage? {
+        let cacheKey = NSString(string: url)
+        
+        if let image = cache.object(forKey: cacheKey) {
+            return image
+        } else {
+            guard let url = URL(string: url) else { return nil }
+            
+            guard let (data, response) = try? await URLSession.shared.data(from: url) else { return nil }
+            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else { return nil}
+            guard let image = UIImage(data: data) else { return nil }
+            cache.setObject(image, forKey: cacheKey)
+            return image
+        }
+    }
 }

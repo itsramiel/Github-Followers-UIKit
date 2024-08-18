@@ -12,13 +12,6 @@ class SearchVC: UIViewController {
     let usernameTextField = GFTextField()
     let ctaButton = GFButton(backgroundColor: .systemGreen, title: "Get Followers")
     
-    var isUsernameEntered: Bool {
-        if let username = usernameTextField.text {
-            return !username.isEmpty
-        }
-        return false
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -34,25 +27,23 @@ class SearchVC: UIViewController {
     }
     
     func createDismissKeyboardTapGesture() {
-        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
+        let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
         view.addGestureRecognizer(tap)
     }
     
     @objc func pushFollowersListVC() {
-        guard isUsernameEntered else {
+        guard let username = usernameTextField.text, !username.isEmpty else {
             presentGFAlertOnMainThread(title: "Empty Username", message: "Please enter a username. We need to know who to look for 😊", buttonTitle: "Ok")
             return
         }
-        let followersListVC = FollowersListVC()
-        followersListVC.username = usernameTextField.text
-        followersListVC.title = usernameTextField.text
+        let followersListVC = FollowersListVC(username: username)
         navigationController?.pushViewController(followersListVC, animated: true)
     }
     
     func configureLogoImageView() {
         view.addSubview(logoImageView)
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
-        logoImageView.image = UIImage(named: "gh-logo")
+        logoImageView.image = UIImage(resource: .ghLogo)
         
         NSLayoutConstraint.activate([
             logoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),

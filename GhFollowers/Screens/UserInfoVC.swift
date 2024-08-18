@@ -12,7 +12,7 @@ protocol UserInfoVCDelegate: AnyObject {
     func didTapFollowers()
 }
 
-class UserInfoVC: UIViewController {
+class UserInfoVC: GFDataLoadingVC {
     
     let headerView = UIView()
     let itemViewOne = UIView()
@@ -72,8 +72,7 @@ class UserInfoVC: UIViewController {
     }
     
     private func displayDateLabel(user: User) {
-        guard let createdAt = user.createdAt.UTCStringToDate() else { return }
-        let formattedDate = createdAt.convertToMonthYearFormat()
+        let formattedDate = user.createdAt.convertToMonthYearFormat()
         self.dateLabel.text = "Github since \(formattedDate)"
     }
     

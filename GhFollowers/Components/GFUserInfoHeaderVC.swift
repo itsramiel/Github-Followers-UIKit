@@ -36,7 +36,9 @@ class GFUserInfoHeaderVC: UIViewController {
     }
     
     private func configureUIElements() {
-        avatarImageView.downloadImage(from: user.avatarUrl)
+        Task.init {
+            avatarImageView.image = await NetworkManager.shared._downloadImage(from: user.avatarUrl)
+        }
         usernameLabel.text = user.login
         nameLabel.text = user.name ?? "NA"
         locationLabel.text = user.location ?? "NA"
